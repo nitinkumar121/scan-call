@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GenrateTokenController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VechileDetailController;
 use App\Models\vechile_detail;
@@ -29,5 +30,7 @@ Route::post('/user/update', [UserController::class, 'update']);
 Route::post('/vechile/new', [VechileDetailController::class, 'create']);
 // send otp and verify email
 Route::post('/send_otp' , [UserController::class, 'send_otp']);
+Route::post('/generate_token' , [GenrateTokenController::class, 'generateNew']);
+
 
 

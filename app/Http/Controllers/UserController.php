@@ -138,6 +138,7 @@ class UserController extends Controller
 
     public function send_otp(Request $request){
 
+        dd($request);
         $otp = rand('1111' , '9999');
         require base_path("vendor/autoload.php");
         $mail = new PHPMailer(true);
