@@ -138,7 +138,44 @@ class UserController extends Controller
 
     public function send_otp(Request $request){
 
-        dd($request);
+
+        $url = 'https://fcm.googleapis.com/fcm/send';
+
+        $id =['38F8477F513CF70E'];
+        $message ="hello buddy";
+        $fields = array (
+                'registration_ids' => array (
+                        $id
+                ),
+                'data' => array (
+                        "message" => $message
+                )
+        );
+        $fields = json_encode ( $fields );
+    
+        $headers = array (
+                'Authorization: key=' . " MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQCqKI40zgjNQO5r\n6aT9QohovlUkVOHAU8xVQFDjtEVaK84J0Euixz+rTIjkZYmIQMpqjMbAxbieRujk\nOeuYsndql5/W6wTdz9eBbQCCS7MBrAYbeTnRirven2HupvMr5kSj4/Sb0PDgYdWI\nWO/jWxCFx3kF/1oQ6GLEoIPA0DtU8h/vX2R8lsRrbGLifuxl02lNNDnQQv1jP6J8\ncDxkSnxMsQiAOAlP7qlJUMszEXnLHCNanHQeGg+dYculCR1Ocf5uZAo+W27umbNj\n0Tzn78gDlMsH4taxK5uG2fqBxghXWG7T73btQlW+68XOxt97F06vM/X0T1vxCXGo\naXKkJny5AgMBAAECggEADAcW2juwGpYa5EzdKTvBOaouiYVoebhSqroDnbzZ5CBR\njZcIKabs5LZhvMdCm/t8c2ClEe5H+QQpJSzE7wO6djHmjgIJ04YEBTWHwi4Iprca\nrWl5wUqNshRRD1YEvVcnBfCwky0HQc0Yk20587e1qMcrUlW075oFlUGFXqU5dG0V\neA96v3QhPxltd6eumMdVZdWJ8Q5fP20QG8t6ptgV6ClDGFhNElPfrU70oa+IH7BZ\n5ZwEYKzEjWt0ro6D7ubtflQCxYWYhOmlez1vSAr3WeEHCFcVSpbZFBH+1vFxnJXy\nswkRqP8Fa1TZzlr0S39TjDa0+0thKrAEQwMnvHr+AQKBgQDXxE3tE5h+XIUJ6n1B\nKPlfedGEzZYr3aSG43TFavzD1IvPr0sDl3OPkeYG/wYW8Ts1heBLyHtGrr7BEVAA\n9MxSQeFz57ljtUeTWWRw5FV5IdLsrzDyYTPtXr1fimkEKwmLs7WoHn3P3FzSgs1x\nEDCmplN4PEnVS4r5CXXUqc0MgQKBgQDJ4x7LjMEdkPrvI1LOjVgiy3WCKhZEyAp8\nZXk3PTwbGQ7o38T2UrgqF21P0HQsRJcmXa2m7bFI9pgYCFeTB4IeDd4DJZ+G9FhS\nAOyy9EEC0pg71DniOwP+kSkEPkawAgCCo8oHuULF6fLUEAA/cqGFfm6kICuFQt6L\n59iw3rS0OQKBgQDBSywgYfiv4wSQEJCrSiC1BrXLSj3pCEN3T9dxcFoGuaeSo9AI\n5KnzCVpQFDEJZoyLc2avnWfKt4tN/Mt2P9e3LSvjIMl1aJY5i9CuTe/Ad6u0u3GX\nAbt6P/BY4e8Ye9GuZI0tkjtVdm11bRbM3hsngEOwqBngyi8y0OXNYVy/gQKBgQCx\n6vKMuDLId6htb1feqDnwEBYy7BxL6W80SckVoWWDDAZTvEC8RBIBJjwzhqWbDaeX\nLB+JaRhAEPHg3BkxfgBxtA7f/xwjttrPCfmPjCpu7mEy+Mk6UoAmrI7VKnzpSBpj\nBy1YuS/bc12I/cD6KW+nUdD321H/UvsFmQEifmIKIQKBgQCL30ijvrNW9tEceAd1\nh4U0TwpR2FBhntDjG6ond6JMFohsA7S1hNhpf6eAyO0DOI2Icrar3IG5Lo73AyqM\nskq7HozH5r2EM7MgWN+lEVTwxpNzc8umkfvWDwtZpbp7DLZKki4e6asOmRbP+RzY\nV5aSIsXNT8DV6wKdPcXERtCjCA==",
+                'Content-Type: application/json'
+        );
+    
+        $ch = curl_init ();
+        curl_setopt ( $ch, CURLOPT_URL, $url );
+        curl_setopt ( $ch, CURLOPT_POST, true );
+        curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
+        curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+        curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
+    
+        $result = curl_exec ( $ch );
+        echo $result;
+        curl_close ( $ch );
+
+
+
+
+        
+        return $request;
+
+
         $otp = rand('1111' , '9999');
         require base_path("vendor/autoload.php");
         $mail = new PHPMailer(true);
