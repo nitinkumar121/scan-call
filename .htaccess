@@ -7,8 +7,10 @@ RewriteCond %{REQUEST_FILENAME} -d [OR]
 RewriteCond %{REQUEST_FILENAME} -f
 RewriteRule ^ ^$1 [N]
 
-RewriteCond %{REQUEST_URI} (\.\w+$) [NC]
-RewriteRule ^(.*)$ public/$1
+RewriteCond %{HTTP_HOST} ^kivasa.com$ [NC,OR]
+RewriteCond %{HTTP_HOST} ^www.kivasa.com$
+RewriteCond %{REQUEST_URI} !git/public/
+RewriteRule (.*) /git/public/$1 [L]
 
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
