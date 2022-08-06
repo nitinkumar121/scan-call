@@ -156,10 +156,12 @@ class UserController extends Controller
         $mail->AddAddress($request->email, "");
         // $mail->AltBody = plain text version of email body;
         if( !$mail->send() ) {
-            return back()->with("failed", "otp not sent.")->withErrors($mail->ErrorInfo);
+            $response = ["msg" => "otp not sent" , "status"=>"404"];
+            return $response;
         }
         else {
-            return back()->with("success", "otp has been sent.");
-        }
+            $response = ["msg" => "otp  sent" , "status"=>"200"];
+            return $response;     
+           }
     }
 }
