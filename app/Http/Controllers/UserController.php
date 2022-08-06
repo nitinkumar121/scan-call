@@ -147,7 +147,7 @@ class UserController extends Controller
         $mail->Username = 'notifications@kivasa.com';   //  sender username
         $mail->Password = 'Notifications@123';       // sender password
         $mail->SMTPSecure = 'tls';                  // encryption - ssl/tls
-        $mail->Port = 587;                          // port - 587/465
+        $mail->Port = 465;                          // port - 587/465
         $mail->setFrom('notifications@kivasa.com', 'kivasa.com');
         $mail->addReplyTo('nitinrohilla515@gmail.com', 'sender-reply-name');
         $mail->isHTML(true);                // Set email content format to HTML
