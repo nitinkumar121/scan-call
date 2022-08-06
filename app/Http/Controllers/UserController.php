@@ -142,14 +142,14 @@ class UserController extends Controller
         $mail = new PHPMailer(true);
         $mail->SMTPDebug = 0;
         $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com';             //  smtp host
+        $mail->Host = 'smtp.hostinger.com';             //  smtp host
         $mail->SMTPAuth = true;
-        $mail->Username = 'nitinrohilla515@gmail.com';   //  sender username
-        $mail->Password = '9password';       // sender password
+        $mail->Username = 'notifications@kivasa.com';   //  sender username
+        $mail->Password = 'Notifications@123';       // sender password
         $mail->SMTPSecure = 'tls';                  // encryption - ssl/tls
         $mail->Port = 587;                          // port - 587/465
-        $mail->setFrom('nitinrohilla515@gmail.com', 'kivasa.com');
-        $mail->addReplyTo('rohillaking148@gmail.com', 'sender-reply-name');
+        $mail->setFrom('notifications@kivasa.com', 'kivasa.com');
+        $mail->addReplyTo('nitinrohilla515@gmail.com', 'sender-reply-name');
         $mail->isHTML(true);                // Set email content format to HTML
         $mail->Subject = $request->emailSubject;
         $mail->Body    = "your otp for email verification is ".$otp;
