@@ -21,9 +21,9 @@ class GenrateTokenController extends Controller
     {
         $request->user_id;
         $cahnnel_name = $request->channel_name;
-        $response = Http::get('https://fque355k2a.execute-api.us-east-2.amazonaws.com/access-token?channelName={$cahnnel_name}'); 
+        $response = Http::get("https://fque355k2a.execute-api.us-east-2.amazonaws.com/access-token?channelName={$cahnnel_name}"); 
         // dd(json_encode($response->json()));        
-        $return = ["staus"=>200, "token"=> $response->json()];
+        $return = ["staus"=>200, "token"=> json_decode($response)];
         return $return;
     }
 
