@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\GenrateToken;
 use Illuminate\Http\Request;
-use token\Generate;
+use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\Http;
+
 
 
 
@@ -18,23 +20,11 @@ class GenrateTokenController extends Controller
     public function generateNew(Request $request)
     {
         $request->user_id;
-        $request->channel_name;
-
-    
-        // Import Composer to manage dependencies 
-        require base_path("vendor/autoload.php");
-        $netlessToken = new Generate;
-        $sdkToken = $netlessToken->sdkToken(
-           "rowJmkP9D54bBYQH", // Fill in the AK you get from Agora Console 
-           "ssMLCp9RXsLRZ6o5hMbD0qqGeHbZDUu3", // Fill in the SK you get from Agora Console  
-           1000 * 60 * 10, // Token validity period in milliseconds. If you set it to 0, the token will never expire 
-              array(
-               "role" => Generate::AdminRole, // Define the permissions granted by the token. You can set it to AdminRole, WriterRole, or ReaderRole 
-              )
-        );
-        echo $sdkToken;        
-        
-        
+        $cahnnel_name = $request->channel_name;
+        $response = Http::get('https://fque355k2a.execute-api.us-east-2.amazonaws.com/access-token?channelName={$cahnnel_name}'); 
+        // dd(json_encode($response->json()));        
+        $return = ["staus"=>200, "token"=> $response->json()];
+        return $return;
     }
 
     /**

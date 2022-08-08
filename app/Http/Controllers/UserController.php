@@ -160,7 +160,7 @@ class UserController extends Controller
             return $response;
         }
         else {
-            $response = ["msg" => "otp  sent" , "status"=>"200"];
+            $response = ["msg" => "otp  sent" , "status"=>"200" ,"otp"=>$otp];
             return $response;     
            }
     }
