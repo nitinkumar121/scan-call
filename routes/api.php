@@ -3,6 +3,8 @@
 use App\Http\Controllers\GenrateTokenController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VechileDetailController;
+use App\Http\Controllers\CarListController;
+
 use App\Models\vechile_detail;
 use Illuminate\Http\Request;
 
@@ -31,6 +33,11 @@ Route::post('/vechile/new', [VechileDetailController::class, 'create']);
 // send otp and verify email
 Route::post('/send_otp' , [UserController::class, 'send_otp']);
 Route::post('/generate_token' , [GenrateTokenController::class, 'generateNew']);
+Route::post('/get_car_model_names' , [CarListController::class, 'getList']);
+Route::get('/get_brand_names' , [CarListController::class, 'get_brand_names']);
+
+
+
 
 
 
