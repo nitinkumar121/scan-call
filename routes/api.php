@@ -25,8 +25,8 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::post('/user/get', [UserController::class, 'get_data']);
-Route::post('/user/new', [UserController::class, 'create']);
+Route::post('/get_user', [UserController::class, 'get_data']);
+Route::post('/new_user', [UserController::class, 'create']);
 Route::post('/user/update', [UserController::class, 'update']);
 // adding vechile data
 Route::post('/vechile/new', [VechileDetailController::class, 'create']);
@@ -35,6 +35,9 @@ Route::post('/send_otp' , [UserController::class, 'send_otp']);
 Route::post('/generate_token' , [GenrateTokenController::class, 'generateNew']);
 Route::post('/get_car_model_names' , [CarListController::class, 'getList']);
 Route::get('/get_brand_names' , [CarListController::class, 'get_brand_names']);
+Route::post('/add_device_token' , [GenrateTokenController::class, 'addDeviceToken']);
+
+
 
 
 

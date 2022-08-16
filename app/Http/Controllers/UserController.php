@@ -27,10 +27,13 @@ class UserController extends Controller
         $data = User_data::where('phone', $number)->get();
         $response = [];
         if (isset($data[0])) {
-            $data[0]['vechile_data'] = DB::table('vechile_details')->join('barcodes' , 'barcodes.id' ,'=' , 'vechile_details.barcode_id')->where('vechile_details.user_id' , $data[0]->id)->get()->all();
-            if ($data[0]->pic != '')
-                $data[0]->pic = env('BASE_URL'). $data[0]->pic;
-            else $data[0]->pic = '';
+           $vechile_data =  DB::table('vechile_details')->join('barcodes' , 'barcodes.id' ,'=' , 'vechile_details.barcode_id')->where('vechile_details.user_id' , $data[0]->id)->get()->all();
+          
+           $data[0]['total_qr'] = count( $vechile_data);
+           $data[0]['call_history_available'] = 0;
+            if ($data[0]->picture != '' || $data[0]->picture != null)
+                $data[0]->picture = env('BASE_URL'). $data[0]->picture;
+            else $data[0]->picture = '';
             $response['status'] = "200";
             $response['msg'] = "new user";
             $response['data'] = $data[0];
@@ -47,11 +50,11 @@ class UserController extends Controller
         $name = null;
         $public_path = public_path('/user_images');
         // upload image file
-        if ($request->hasFile('pic') && isset($request->pic)) {
+        if ($request->hasFile('picture') && isset($request->picture)) {
             $this->validate($request, [
-                'pic' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'picture' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ]);
-            $image = $request->file('pic');
+            $image = $request->file('picture');
             $name = time() . '.' . $image->getClientOriginalExtension();
             $image->move($public_path, $name);
         }
@@ -59,26 +62,26 @@ class UserController extends Controller
         $check = User_data::where('phone', $request->phone)->get();
         if (isset($check[0])) {
             $response['error'] = "404";
-            $response['msg'] = "No. already registered";
+            $response['msg'] = "Number already registered";
             $response['data'] = null;
             return $response;
         }
         $new_user = new User_data;
-        $new_user->f_name = $request->fname;
-        $new_user->l_name = $request->lname;
+        $new_user->first_name = $request->first_name;
+        $new_user->last_name = $request->last_name;
         $new_user->email = $request->email;
         $new_user->phone = $request->phone;
-        $new_user->gender = $request->gender;
-        $new_user->pic = $name;
+        $new_user->picture = $name;
+        $new_user->device_id = $request->device_id;
         $new_user->save();
 
         // return back user data
         $user_data = User_data::where('phone', $request->phone)->get()[0];
-        if ($user_data->pic != '')
-            $user_data->pic = 'http://kivasa.com/apis/user_images/' . $user_data->pic;
-        else $user_data->pic = '';
+        if ($user_data->picture != '')
+            $user_data->picture = 'http://kivasa.com/apis/user_images/' . $user_data->picture;
+        else $user_data->picture = '';
         $response['status'] = "200";
-        $response['msg'] = "new user";
+        $response['msg'] = "new_user_created";
         $response['data'] = $user_data;
         return  $response;
     }
