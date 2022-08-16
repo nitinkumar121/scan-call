@@ -30,6 +30,9 @@ Route::post('/new_user', [UserController::class, 'create']);
 Route::post('/user/update', [UserController::class, 'update']);
 // adding vechile data
 Route::post('/vechile/new', [VechileDetailController::class, 'create']);
+Route::post('/get_vechiles', [VechileDetailController::class, 'get_vehicles']);
+
+
 // send otp and verify email
 Route::post('/send_otp' , [UserController::class, 'send_otp']);
 Route::post('/generate_token' , [GenrateTokenController::class, 'generateNew']);

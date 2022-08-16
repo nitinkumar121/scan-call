@@ -17,9 +17,13 @@ class VechileDetailController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function get_vehicles( Request $request)
     {
-        //
+        
+        $vechile_data = vechile_detail::select('vechile_details.vechile_name' ,'vechile_details.vechile_number', 'vechile_details.vechile_model' , 'vechile_details.color', 'barcodes.barcode_number' , 'barcodes.barcode_image' , 'barcodes.status')->where('vechile_details.user_id'  , $request->user_id)->leftJoin('barcodes' , "vechile_details.barcode_id" ,'=', 'barcodes.id')->get();
+        $response = ['status'=> 200 , 'message'=> "success", 'data'=> $vechile_data];
+        return $response;
+
     }
 
     /**
@@ -66,14 +70,20 @@ class VechileDetailController extends Controller
             $vechile->vechile_rc_number = $request->vechile_rc_number;
             $vechile->vechile_rc_back_image = $vechile_rc_back_image;
             $vechile->vechile_rc_front_image = $vechile_rc_front_image;
+            $vechile->color = $request->color;
+
             $vechile->barcode_id = $barcode_id[0]->id;
             $vechile->save();
+            $new_id = $vechile->id;
             $barcode = barcode::where('id', $barcode_id[0]->id);
             $barcode->update(['status' => '2']);
 
+            $vechile_new = vechile_detail::where('id' , $new_id);
+
             $response['status'] = "200";
             $response['msg'] = "success";
-            $response['data'] = $barcode_id->get()->all()[0];
+            $response['data']['vechile'] =$vechile_new->get()->all()[0];
+            $response['data']['barcode'] = $barcode->get()->all()[0];
         } else {
             $response['status'] = "404";
             $response['msg'] = "no barcode avilable";
