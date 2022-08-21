@@ -4,7 +4,8 @@ use App\Http\Controllers\GenrateTokenController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VechileDetailController;
 use App\Http\Controllers\CarListController;
-
+use App\Models\systemVariabel;
+use App\Http\Controllers\SystemVariabelController;
 use App\Models\vechile_detail;
 use Illuminate\Http\Request;
 
@@ -39,6 +40,8 @@ Route::post('/generate_token' , [GenrateTokenController::class, 'generateNew']);
 Route::post('/get_car_model_names' , [CarListController::class, 'getList']);
 Route::get('/get_brand_names' , [CarListController::class, 'get_brand_names']);
 Route::post('/add_device_token' , [GenrateTokenController::class, 'addDeviceToken']);
+Route::post('/system_variable' , [SystemVariabelController::class, 'index']);
+
 
 
 

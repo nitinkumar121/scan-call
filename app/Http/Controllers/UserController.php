@@ -72,7 +72,7 @@ class UserController extends Controller
         $new_user->email = $request->email;
         $new_user->phone = $request->phone;
         $new_user->picture = $name;
-        $new_user->device_id = $request->device_id;
+        // $new_user->device_id = $request->device_id;
         $new_user->save();
 
         // return back user data
