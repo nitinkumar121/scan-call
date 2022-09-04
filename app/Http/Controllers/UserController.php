@@ -27,7 +27,7 @@ class UserController extends Controller
         $number = $request->number;
         $data = User_data::where('phone', $number)->get();
     }
-    else if(isset($request->userId)){
+     if(isset($request->userId)){
         $userId = $request->userId;
         $data = User_data::where('id', $userId)->get();
     }
@@ -180,9 +180,9 @@ class UserController extends Controller
         }
 
         public function updateEmail(Request $request){
-            $user_id = $request->user_id;
+            $userId = $request->userId;
             $email =  $request->email;
-            $user_data = User_data::where('id', $user_id);
+            $user_data = User_data::where('id', $userId);
             $arr=['device_id' => '' , 'email'=>$email];
             $user_data->update($arr);
             $response = ['status'=>200, 'msg' => 'success'];
