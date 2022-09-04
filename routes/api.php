@@ -41,6 +41,12 @@ Route::post('/get_car_model_names' , [CarListController::class, 'getList']);
 Route::get('/get_brand_names' , [CarListController::class, 'get_brand_names']);
 Route::post('/add_device_token' , [GenrateTokenController::class, 'addDeviceToken']);
 Route::post('/system_variable' , [SystemVariabelController::class, 'index']);
+Route::post('/logout' , [UserController::class, 'logout']);
+Route::post('/updateEmail' , [UserController::class, 'updateEmail']);
+
+
+
+
 
 
 

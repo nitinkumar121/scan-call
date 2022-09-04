@@ -23,8 +23,14 @@ class UserController extends Controller
 
     function get_data(Request  $request)
     {
+        if(isset($request->number)){
         $number = $request->number;
         $data = User_data::where('phone', $number)->get();
+    }
+    else if(isset($request->userId)){
+        $userId = $request->userId;
+        $data = User_data::where('id', $userId)->get();
+    }
         $response = [];
         if (isset($data[0])) {
            $vechile_data =  DB::table('vechile_details')->join('barcodes' , 'barcodes.id' ,'=' , 'vechile_details.barcode_id')->where('vechile_details.user_id' , $data[0]->id)->get()->all();
@@ -89,17 +95,14 @@ class UserController extends Controller
     public function update(Request $request)
     {
         $user_data = User_data::where('phone', $request->phone)->get()[0];
-        if (!isset($request->fname)) $fname = $user_data->f_name;
-        else $fname = $request->fname;
-        if (!isset($request->lname)) $lname = $user_data->l_name;
-        else $lname = $request->lname;
-        if (!isset($request->gender)) $gender = $user_data->gender;
-        else $gender = $request->gender;
+        if (!isset($request->fname)) $fname = $user_data->first_name;
+        else $fname = $request->first_name;
+        if (!isset($request->lname)) $lname = $user_data->last_name;
+        else $lname = $request->last_name;
         if (!isset($request->new_phone)) $phone = $user_data->phone;
         else  $phone = $request->new_phone;
-        if (!isset($request->email)) $email = $user_data->email;
-        else $email = $request->email;
-        if (!isset($request->pic)) $pic = $user_data->pic;
+     
+        if (!isset($request->pic)) $pic = $user_data->picture;
         else {
             $public_path = public_path('/user_images');
             if ($request->hasFile('pic') && isset($request->pic)) {
@@ -122,18 +125,16 @@ class UserController extends Controller
         }
         $find_user = User_data::where('phone', $request->phone);
         $new_user = [
-            "f_name" => $fname,
-            "l_name" => $lname,
-            "email" => $email,
+            "first_name" => $fname,
+            "last_name" => $lname,
             "phone" => $phone,
-            "gender" => $gender,
-            "pic" => $pic
+            "picture" => $pic
         ];
         $find_user->update($new_user);
 
         $response = [];
         $response['status'] = "200";
-        $response['msg'] = "data updated";
+        $response['message'] = "data updated";
         $response['data'] = null;
         return  $response;
     }
@@ -167,4 +168,25 @@ class UserController extends Controller
             return $response;     
            }
     }
+
+
+        public function logout(Request $request){
+            $user_id = $request->user_id;
+            $user_data = User_data::where('id', $user_id);
+            $arr=['device_id' => '' , 'isLoggedIn'=>'0'];
+            $user_data->update($arr);
+            $response = ['status'=>200, 'msg' => 'success'];
+            return $response;
+        }
+
+        public function updateEmail(Request $request){
+            $user_id = $request->user_id;
+            $email =  $request->email;
+            $user_data = User_data::where('id', $user_id);
+            $arr=['device_id' => '' , 'email'=>$email];
+            $user_data->update($arr);
+            $response = ['status'=>200, 'msg' => 'success'];
+            return $response; 
+        }
+
 }

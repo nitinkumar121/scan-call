@@ -82,9 +82,11 @@ class GenrateTokenController extends Controller
         $find_user = User_data::where('id', $request->user_id);
         $new_user = [
             "device_id" => $request->device_token,
+            'isLoggedIn'=>'1'
         ];
+        
         $find_user->update($new_user);
-        $response =['status' => 200 , 'msg'=>'success'];
+        $response =['status' => 200 , 'message'=>'success'];
         return $response;
     }
 
