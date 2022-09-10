@@ -30,7 +30,7 @@ Route::post('/get_user', [UserController::class, 'get_data']);
 Route::post('/new_user', [UserController::class, 'create']);
 Route::post('/user/update', [UserController::class, 'update']);
 // adding vechile data
-Route::post('/vechile/new', [VechileDetailController::class, 'create']);
+Route::post('/vehicle/new', [VechileDetailController::class, 'create']);
 Route::post('/get_vechiles', [VechileDetailController::class, 'get_vehicles']);
 
 

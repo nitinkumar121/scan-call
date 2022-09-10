@@ -25,12 +25,13 @@ class VechileDetailController extends Controller
         $data_arr=[];
         foreach ($vechile_data_all as $vechile_data){
         $data=[];
-        $car_model =  DB::table('car_lists')->join('car_brands' , 'car_brands.id', '=' , 'car_lists.brand_id')->where('car_lists.id' , $vechile_data[0]->car_model_id)->get()->all();
+        $car_model =  DB::table('car_lists')->join('car_brands' , 'car_brands.id', '=' , 'car_lists.brand_id')->where('car_lists.id' , $vechile_data->car_model_id)->get()->all();
         $vechile_data->car_model_id =  $car_model[0]->car_name;
-        $data = $vechile_data[0];
+        $data = $vechile_data;
         $data['car_name'] = $car_model[0]->car_name;
         $data['car_model'] = $car_model[0]->car_model;
         $data['brand_name'] = $car_model[0]->brand_name;
+
         array_push($data_arr , $data);
         }
         $response = ['status'=> 200 , 'message'=> "success", 'data'=> $data_arr];
@@ -70,12 +71,13 @@ class VechileDetailController extends Controller
             $vechile = new vechile_detail;
             $vechile->user_id = $request->user_id;
             $vechile->brand_id = $request->brand_id;
-            $vechile->vechile_number = $request->vechile_number;
+            // $vechile->vechile_number = $request->vechile_number;
             $vechile->vechile_rc_front_image = $vechile_rc_front_image;
             $vechile->color = $request->color;
             $vechile->car_model_id = $request->car_model_id;
             $vechile->vechile_rc_back_image ='';
             $vechile->barcode_id = $barcode_id[0]->id;
+            $vechile->address = $request->address;
             $vechile->save();
 
             $new_id = $vechile->id;
@@ -86,7 +88,7 @@ class VechileDetailController extends Controller
 
             $response['status'] = "200";
             $response['msg'] = "success";
-            $response['data']['vechile'] =$vechile_new->get()->all()[0];
+            $response['data']['vehicle'] =$vechile_new->get()->all()[0];
             $response['data']['barcode'] = $barcode->get()->all()[0];
         } else {
             $response['status'] = "404";

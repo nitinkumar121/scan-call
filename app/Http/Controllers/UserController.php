@@ -31,6 +31,19 @@ class UserController extends Controller
         $userId = $request->userId;
         $data = User_data::where('id', $userId)->get();
     }
+    if(isset($request->qr_id)){
+        $qr_id = $request->qr_id;
+        $barcode_id = barcode::where('barcode_number' , $qr_id)->get()[0];
+        $userId = vechile_detail::select('user_id')->where('barcode_id' , $barcode_id['id'])->get();
+        if($userId[0]) $userId = $userId[0]['user_id'];
+        else {
+            $response['error'] = "404";
+            $response['msg'] = "user not found";
+            $response['data'] = null;
+            return $response;
+        }
+        $data = User_data::where('id', $userId)->get();
+    }
         $response = [];
         if (isset($data[0])) {
            $vechile_data =  DB::table('vechile_details')->join('barcodes' , 'barcodes.id' ,'=' , 'vechile_details.barcode_id')->where('vechile_details.user_id' , $data[0]->id)->get()->all();
