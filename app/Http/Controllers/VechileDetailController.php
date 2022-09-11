@@ -23,6 +23,8 @@ class VechileDetailController extends Controller
         
         $vechile_data_all = vechile_detail::select( 'vechile_details.vechile_number','vechile_details.car_model_id', 'vechile_details.vechile_rc_front_image', 'vechile_details.color', 'barcodes.barcode_number' , 'barcodes.barcode_image' , 'barcodes.status')->where('vechile_details.user_id'  , $request->user_id)->leftJoin('barcodes' , "vechile_details.barcode_id" ,'=', 'barcodes.id')->get();
         $data_arr=[];
+        if($vechile_data_all[0] == null) return   $response = ['status'=> 404 , 'message'=> "No Data found", 'data'=> []];
+
         foreach ($vechile_data_all as $vechile_data){
         $data=[];
         $car_model =  DB::table('car_lists')->join('car_brands' , 'car_brands.id', '=' , 'car_lists.brand_id')->where('car_lists.id' , $vechile_data->car_model_id)->get()->all();

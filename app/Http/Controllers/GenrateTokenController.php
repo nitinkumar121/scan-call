@@ -8,8 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 
-
-
+use function PHPUnit\Framework\returnSelf;
 
 class GenrateTokenController extends Controller
 {
@@ -28,6 +27,11 @@ class GenrateTokenController extends Controller
         $recevier_data = User_data::where('id', $request->revicer_id)->get();
         // sender data 
         $sender_data =  User_data::where('id', $request->sender_id)->get();
+
+        if(!$sender_data[0]) return   $return = ["staus"=>404, "msg"=>'sender not found'];
+        if(!$recevier_data[0]) return   $return = ["staus"=>404, "msg"=>'receiver not found'];
+
+
 
         $to = $recevier_data[0]->device_id;
         $title= "Scan-Call";
