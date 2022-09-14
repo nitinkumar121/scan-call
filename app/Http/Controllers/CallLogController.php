@@ -17,7 +17,6 @@ class CallLogController extends Controller
     public function get_call_details(Request  $request)
     {
 
-        return "ok";
         $call_detals = call_log::where('reciever_id' , $request->user_id)->orwhere('sender_id' , $request->user_id)->get();
         if(!isset($call_detals[0])) return  ['message'=> 'no data found' , 'status'=>200 , 'data'=>null];
         else {
