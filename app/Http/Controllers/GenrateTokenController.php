@@ -24,20 +24,16 @@ class GenrateTokenController extends Controller
         // dd(json_encode($response->json()));        
         $return = ["staus"=>200, "data"=> json_decode($response)];
         // recevier data
-        $recevier_data = User_data::where('id', $request->revicer_id)->get();
+        $recevier_data = User_data::select('id , first_name , last_name , picture')->where('id', $request->revicer_id)->get();
         // sender data 
-        $sender_data =  User_data::where('id', $request->sender_id)->get();
+        $sender_data =  User_data::select('id , first_name , last_name , picture')->where('id', $request->sender_id)->get();
 
-        if(!$sender_data[0]) return   $return = ["staus"=>404, "msg"=>'sender not found'];
-        if(!$recevier_data[0]) return   $return = ["staus"=>404, "msg"=>'receiver not found'];
-
-
-
+        if(!isset($sender_data[0])) return   $return = ["staus"=>404, "msg"=>'sender not found'];
+        if(!isset($recevier_data[0])) return   $return = ["staus"=>404, "msg"=>'receiver not found'];
         $to = $recevier_data[0]->device_id;
         $title= "Scan-Call";
           $message =$sender_data[0]->first_name." calling you";
-           $img = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXaEk6FabyCzu9RtDWP4f6K7zzVMjS9Lp7MA&usqp=CAU";
-        $datapayload = ['type'=>"isFormNotification", 'token'=>$response['token'], 'user_id'=>$request->user_id ,'channel'=> $request->channel_name];
+        $datapayload = ['type'=>"isFormNotification", 'token'=>$response['token'], 'receiver_data'=>$recevier_data[0], 'sender_data'=>$sender_data[0],'channel'=> $request->channel_name];
 
         $msg = urlencode($message);
         $data = array(
@@ -48,11 +44,7 @@ class GenrateTokenController extends Controller
             'body'=>$message,
             'color' => "#79bc64"
         );
-        if($img){
-            $data["image"] = $img;
-            $data["style"] = "picture";
-            $data["picture"] = $img;
-        }
+      
         $fields = array(
             'to'=>$to,
             'notification'=>$data,

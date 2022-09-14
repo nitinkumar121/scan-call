@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CallLogController;
 use App\Http\Controllers\GenrateTokenController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VechileDetailController;
@@ -43,6 +44,13 @@ Route::post('/add_device_token' , [GenrateTokenController::class, 'addDeviceToke
 Route::post('/system_variable' , [SystemVariabelController::class, 'index']);
 Route::post('/logout' , [UserController::class, 'logout']);
 Route::post('/updateEmail' , [UserController::class, 'updateEmail']);
+Route::post('/get_call_details' , [CallLogController::class , 'get_call_details']);
+Route::post('/update_call_details' , [CallLogController::class , 'update_call_details']);
+Route::post('/add_call_details' , [CallLogController::class , 'add_call_details']);
+
+
+
+
 
 
 
