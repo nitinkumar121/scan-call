@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\call_log;
-use App\Models\User_data;
 use App\Http\Requests\Updatecall_logRequest;
+use App\Models\User_data;
 use Illuminate\Http\Request;
 
 class CallLogController extends Controller
@@ -16,14 +16,22 @@ class CallLogController extends Controller
      */
     public function get_call_details(Request  $request)
     {
-
-        $call_detals = call_log::where('reciever_id' , $request->user_id)->orwhere('sender_id' , $request->user_id)->get();
-        if(!isset($call_detals[0])) return  ['message'=> 'no data found' , 'status'=>200 , 'data'=>null];
+        $userModel=new User_data();
+        $call_details = call_log::where('reciever_id' , $request->user_id)->orwhere('sender_id' , $request->user_id)->get();
+        if(!isset($call_details[0])) return  ['message'=> 'no data found' , 'status'=>200 , 'data'=>null];
         else {
             $data['total_incoming']= call_log::where('reciever_id' , $request->user_id)->Where('call_status','>' , '0')->count();
             $data['total_outgoing']=call_log::where('sender_id' , $request->user_id)->count();;
             $data['total_missed']= call_log::where('reciever_id' , $request->user_id)->Where('call_status' , '0')->count();
-            $data['call_data'] = $call_detals;
+            $call_data =[];
+            foreach($call_details as $call_detail){
+                $user_data= $userModel::select('first_name' , 'last_name')->where('id',$call_detail['reciever_id'])->get()[0];
+                $call_detail['reciever_name']= $user_data['first_name'].' '.$user_data['last_name'];
+                $user_data= $userModel::select('first_name' , 'last_name')->where('id',$call_detail['sender_id'])->get()[0];
+                $call_detail['sender_name']= $user_data['first_name'].' '.$user_data['last_name'];
+                array_push($call_data , $call_detail);
+            }
+            $data['call_data'] = $call_data;
 
             return  ['message'=> 'success' , 'status'=>200 , 'data'=>$data];
         }
@@ -59,7 +67,6 @@ class CallLogController extends Controller
      */
     public function add_call_details(Request $request)
     {
-        $return = ["staus"=>200, "message" => 'success' , 'data'=>$request->input()];
           // recevier data
         //   $recevier_data = User_data::where('id', $request->reciever_id)->get();
         //   if(!isset($recevier_data[0])) { $return['message']='reciever not found'; return $return; }
@@ -70,9 +77,18 @@ class CallLogController extends Controller
         if(!isset($request->sender_qr_id)) $request->sender_qr_id ='';
         if(!isset($request->reciever_qr_id)) $request->reciever_qr_id ='';
 
-        $data= ['sender_id'=> $request->sender_id , 'reciever_id' => $request->reciever_id , 'call_status' =>'0' , 'reciever_qr_id'=>$request->reciever_qr_id , 'sender_qr_id'=>$request->sender_qr_id];
         $call = new call_log();
-        $call->insert($data);
+        $call->sender_id= $request->sender_id;
+        $call->reciever_id  =$request->reciever_id;
+        $call->call_status ='0';
+        $call->sender_qr_id ='';
+        $call->reciever_qr_id='';
+
+        $call->save();
+        $inuts = $request->input();
+        $inuts['id']= $call->id;
+        $return = ["staus"=>200, "message" => 'success' , 'data'=>$inuts];
+
         return $return;
 
 
