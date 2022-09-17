@@ -18,7 +18,7 @@ class CallLogController extends Controller
     {
         $userModel=new User_data();
         $call_details = call_log::where('reciever_id' , $request->user_id)->orwhere('sender_id' , $request->user_id)->get();
-        if(!isset($call_details[0])) return  ['message'=> 'no data found' , 'status'=>200 , 'data'=>null];
+        if(!isset($call_details[0])) return  ['message'=> 'user not found' , 'status'=>200 , 'data'=>null];
         else {
             $data['total_incoming']= call_log::where('reciever_id' , $request->user_id)->Where('call_status','>' , '0')->count();
             $data['total_outgoing']=call_log::where('sender_id' , $request->user_id)->count();;
@@ -68,10 +68,15 @@ class CallLogController extends Controller
     public function add_call_details(Request $request)
     {
           // recevier data
-        //   $recevier_data = User_data::where('id', $request->reciever_id)->get();
-        //   if(!isset($recevier_data[0])) { $return['message']='reciever not found'; return $return; }
-        //   $sender_data =  User_data::where('id', $request->sender_id)->get();
-        //   if(!isset($sender_data[0])) { $return['message']='sender not found'; return $return; }
+          $recevier_data = User_data::where('id', $request->reciever_id)->get();
+          if(!isset($recevier_data[0])) {   $return['message']='reciever not found';$return['status']=404; $return['data']= null;
+            return $return;
+         }
+          $sender_data =  User_data::where('id', $request->sender_id)->get();
+          if(!isset($sender_data[0])) { $return['message']='sender not found'; $return['status']=404; $return['data']= null;
+            return $return;
+
+        }
 
         // dd($recevier_data);
         if(!isset($request->sender_qr_id)) $request->sender_qr_id ='';
