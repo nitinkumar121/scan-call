@@ -23,7 +23,7 @@ class CallLogController extends Controller
             $data['total_incoming']= call_log::where('reciever_id' , $request->user_id)->Where('call_status','>' , '0')->count();
             $data['total_outgoing']=call_log::where('sender_id' , $request->user_id)->count();;
             $data['total_missed']= call_log::where('reciever_id' , $request->user_id)->Where('call_status' , '0')->count();
-            $data['call_data'] = $call_detals[0];
+            $data['call_data'] = $call_detals;
 
             return  ['message'=> 'success' , 'status'=>200 , 'data'=>$data];
         }
