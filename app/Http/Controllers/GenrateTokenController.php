@@ -23,10 +23,10 @@ class GenrateTokenController extends Controller
      $response = Http::get("https://fque355k2a.execute-api.us-east-2.amazonaws.com/access-token?channelName={$channel_name}"); 
         // dd(json_encode($response->json()));        
         $return = ["staus"=>200, "data"=> json_decode($response)];
-        // recevier data
-        $recevier_data = User_data::select('id , first_name , last_name , picture')->where('id', $request->revicer_id)->get();
+                // recevier data
+        $recevier_data = User_data::select('id' , 'first_name' , 'last_name' , 'picture')->where('id', $request->revicer_id)->get();
         // sender data 
-        $sender_data =  User_data::select('id , first_name , last_name , picture')->where('id', $request->sender_id)->get();
+        $sender_data =  User_data::select('id' , 'first_name' , 'last_name' , 'picture')->where('id', $request->sender_id)->get();
 
         if(!isset($sender_data[0])) return   $return = ["staus"=>404, "msg"=>'sender not found'];
         if(!isset($recevier_data[0])) return   $return = ["staus"=>404, "msg"=>'receiver not found'];

@@ -18,8 +18,11 @@ class CallLogController extends Controller
     {
         $userModel=new User_data();
         $call_details = call_log::where('reciever_id' , $request->user_id)->orwhere('sender_id' , $request->user_id)->get();
-        if(!isset($call_details[0])) return  ['message'=> 'user not found' , 'status'=>200 , 'data'=>null];
+        if(!isset($call_details[0])) {
+            return  $return =['message'=> 'user not found' , 'status'=>200 , 'data'=>null];
+        }
         else {
+
             $data['total_incoming']= call_log::where('reciever_id' , $request->user_id)->Where('call_status','>' , '0')->count();
             $data['total_outgoing']=call_log::where('sender_id' , $request->user_id)->count();;
             $data['total_missed']= call_log::where('reciever_id' , $request->user_id)->Where('call_status' , '0')->count();
